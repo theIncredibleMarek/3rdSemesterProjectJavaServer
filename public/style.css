@@ -1,0 +1,9 @@
+body {font-family: sans-serif}
+#header {margin: 10px;}
+#outer {margin: 10px; padding-left: 100px; padding-right: 100px; padding-top: 30px;}
+#other_info {float: right;}
+#details {padding-left: 5px;}
+#details2 {padding-left: 5px;}
+#newRole {padding-left: 5px;}
+#optionButtons {padding-top: 10px}
+label  {display: inline-block; float: left; width: 6em;}
