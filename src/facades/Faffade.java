@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import model.Users;
+import security.BCrypt;
 import security.SecurePassword;
 
 public class Faffade implements IFaffade
@@ -32,9 +33,21 @@ public class Faffade implements IFaffade
             {
                 throw new NotFoundException("No user exists for the given username");
             }
-            //User exists so now secure his password and compare with the one in the DB
-            String passFromWeb = SecurePassword.getPassword(password, u.getSalt());
-            if (passFromWeb.equals(u.getPassword()))
+//            //User exists so now secure his password and compare with the one in the DB
+//            String passFromWeb = SecurePassword.getPassword(password, u.getSalt());
+//           
+//            if (passFromWeb.equals(u.getPassword()))
+//            {
+//                //login successful
+//                return gson.toJson(u.getType());
+//            } else
+//            {
+//                //wrong password
+//                return gson.toJson("Wrong password.");
+//            }
+
+            boolean correct = BCrypt.checkpw(password, u.getPassword());
+            if (correct)
             {
                 //login successful
                 return gson.toJson(u.getType());
@@ -58,8 +71,10 @@ public class Faffade implements IFaffade
             Users u = gson.fromJson(json, Users.class);
             em = emf.createEntityManager();
             //generate the password and the salt and insert into the db
-            String salt = SecurePassword.generateSalt();
-            String securePassword = SecurePassword.getPassword(u.getPassword(), salt);
+//            String salt = SecurePassword.generateSalt();
+//            String securePassword = SecurePassword.getPassword(u.getPassword(), salt);
+            String salt = BCrypt.gensalt(12);
+            String securePassword = BCrypt.hashpw(u.getPassword(), salt);
             u.setPassword(securePassword);
             u.setSalt(salt);
             em.getTransaction().begin();
@@ -85,9 +100,11 @@ public class Faffade implements IFaffade
             {
                 throw new NotFoundException("No user exists for the given id");
             }
-            
-            String salt = SecurePassword.generateSalt();
-            String password = SecurePassword.getPassword(updatedUser.getPassword(), salt);
+
+//            String salt = SecurePassword.generateSalt();
+//            String password = SecurePassword.getPassword(updatedUser.getPassword(), salt);
+            String salt = BCrypt.gensalt(12);
+            String password = BCrypt.hashpw(updatedUser.getPassword(), salt);
             existingUser.setPassword(password);
             existingUser.setSalt(salt);
             existingUser.setType(updatedUser.getType());
