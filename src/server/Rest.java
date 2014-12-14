@@ -91,11 +91,20 @@ public class Rest
                     break;
                 case "POST":
                 {
-                    InputStreamReader isr = new InputStreamReader(he.getRequestBody(), "utf-8");
-                    BufferedReader br = new BufferedReader(isr);
-                    String jsonQuery = br.readLine();
-                    Users u = fafade.addUserFromGson(jsonQuery);
-                    response = gsonExpose.toJson(u);
+//                    InputStreamReader isr = new InputStreamReader(he.getRequestBody(), "utf-8");
+//                    BufferedReader br = new BufferedReader(isr);
+//                    String jsonQuery = br.readLine();
+//                    Users u = fafade.addUserFromGson(jsonQuery);
+//                    response = gsonExpose.toJson(u);
+//                    break;
+                    Headers headers = he.getRequestHeaders();                    
+                    Users u = new Users();
+                    u.setUsername(headers.getFirst("username"));
+                    u.setPassword(headers.getFirst("password"));
+                    u.setType(headers.getFirst("userType"));
+                    
+                    Users addedUser = fafade.addUserFromGson(new Gson().toJson(u));
+                    response = gsonExpose.toJson(addedUser);
                     break;
                 }
                 case "PUT":

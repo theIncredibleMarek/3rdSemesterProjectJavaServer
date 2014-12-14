@@ -14,10 +14,6 @@
       <copy file="server.properties" todir="${dist.dir}"/> 
       <copy file="startServer.bat" todir="${dist.dir}"/>
       <copy file="startTester.bat" todir="${dist.dir}"/>
-      <copy file="public/index.html" todir="dist/public"/>
-      <copy file="public/script.js" todir="dist/public"/>
-      <copy file="public/style.css" todir="dist/public"/>
-      <copy file="public/documentation.pdf" todir="dist/public"/>
     </target>
     <!--
 
